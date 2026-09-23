@@ -46,6 +46,11 @@ func NewGame(width, height int) *Game {
 }
 
 func (g *Game) draw() {
+	if g.gameOver {
+		g.drawGameOver()
+		return
+	}
+
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	for x := 0; x < g.width; x++ {
 		termbox.SetCell(x, 0, '─', termbox.ColorWhite, termbox.ColorDefault)
@@ -189,6 +194,23 @@ func (g *Game) placeFood() {
 			return
 		}
 	}
+}
+
+func drawCenteredString(y int, s string, width int, fg termbox.Attribute) {
+	runes := []rune(s)
+	startX := (width - len(runes)) / 2
+	for i, r := range runes {
+		termbox.SetCell(startX+i, y, r, fg, termbox.ColorDefault)
+	}
+}
+
+func (g *Game) drawGameOver() {
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+	drawCenteredString(g.height/2-2, "GAME OVER", g.width, termbox.ColorRed)
+	drawCenteredString(g.height/2, fmt.Sprintf("Score: %d", g.score), g.width, termbox.ColorYellow)
+	drawCenteredString(g.height/2+1, fmt.Sprintf("Level: %d", g.level), g.width, termbox.ColorYellow)
+	drawCenteredString(g.height/2+3, "R — перезапуск, Q — выход", g.width, termbox.ColorWhite)
+	termbox.Flush()
 }
 
 func (g *Game) placeMalware() {
