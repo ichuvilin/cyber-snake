@@ -221,6 +221,10 @@ func (g *Game) move() {
 	g.snake = append([]Point{newHead}, g.snake...)
 	if newHead.x == g.food.x && newHead.y == g.food.y {
 		g.score++
+		if g.score%5 == 0 {
+			g.level++
+			g.placeMalware()
+		}
 		g.placeFood()
 		return
 	}
