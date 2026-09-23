@@ -277,10 +277,10 @@ func (g *Game) move() {
 	g.snake = g.snake[:len(g.snake)-1]
 }
 
-func main() {
+func playGame() {
 	err := termbox.Init()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("failed to initialize termbox:", err)
 		return
 	}
 	defer termbox.Close()
@@ -294,23 +294,23 @@ func main() {
 	}()
 	ticker := time.NewTicker(200 * time.Millisecond)
 	defer ticker.Stop()
-
 	g.draw()
 	for {
 		select {
-
 		case ev := <-events:
 			g.handleInput(ev)
-
+			g.draw()
 		case <-ticker.C:
 			if !g.gameOver {
 				g.move()
 			}
-
 			g.draw()
-
 		case <-g.quit:
 			return
 		}
 	}
+}
+
+func main() {
+	playGame()
 }
