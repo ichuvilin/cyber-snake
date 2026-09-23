@@ -125,6 +125,33 @@ func (g *Game) handleInput(ev termbox.Event) {
 	g.dir = newDir
 }
 
+func (g *Game) isOnSnake(p Point) bool {
+	for _, segment := range g.snake {
+		if segment.x == p.x && segment.y == p.y {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (g *Game) isOnMalware(p Point) bool {
+	for _, malware := range g.malware {
+		if malware.x == p.x && malware.y == p.y {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (g *Game) isOutOfBounds(p Point) bool {
+	return p.x < 1 ||
+		p.x > g.width-2 ||
+		p.y < 1 ||
+		p.y > g.height-2
+}
+
 func main() {
 	err := termbox.Init()
 	if err != nil {
