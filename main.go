@@ -139,6 +139,12 @@ func (g *Game) handleInput(ev termbox.Event) {
 		return
 	}
 
+	switch ev.Key {
+	case termbox.KeyEsc:
+		close(g.quit)
+		return
+	}
+
 	var newDir Point
 	switch ev.Key {
 	case termbox.KeyArrowUp:
